@@ -39,3 +39,43 @@ HTML checkbox는 선택이 안되면 클라이언트에서 서버로 값 자체�
 - _open=on
  - 체크 박스를 체크하지 않으면 스프링 MVC가 _open 만 있는 것을 확인하고, open 의 값이 체크되지 않았다고 인식함
 
+# 체크 박스 - 단일2
+
+```
+ <div class="form-check">
+ <input type="checkbox" id="open" th:field="*{open}" class="form-checkinput">
+ <label for="open" class="form-check-label">판매 오픈</label>
+ </div>
+```
+th:field="*{open}" 를 추가하면  <input type="hidden" name="_open" value="on"/> 를 자동적으로 생성 해준다.
+
+##### 타임리프의 체크 확인
+- checked="checked"
+체크 박스에서 판매 여부를 선택해서 저장하면, 조회시에 checked 속성이 추가된 것을 확인할 수 있다. 이런 부분을
+개발자가 직접 처리하려면 상당히 번거롭다. 타임리프의 th:field 를 사용하면, 값이 true 인 경우 체크를 자동으로
+처리해준다.
+
+# 체크 박스 - 멀티
+
+##### @ModelAttribute의 특별한 사용법
+
+- 공통적인 데이터를 model.addAttribute로 보내준다면 @ModelAttribute를 통해 컨트롤러 요청 할때마다 model 담기게 해준다. 각각 메서드 마다 model.addAttribute를 구성을 안해주고 공통으로 @ModelAttribute 통해 넣어준다.
+
+```
+<div>
+ <div>등록 지역</div>
+ <div th:each="region : ${regions}" class="form-check form-check-inline">
+ <input type="checkbox" th:field="*{regions}" th:value="${region.key}"
+class="form-check-input">
+ <label th:for="${#ids.prev('regions')}"
+ th:text="${region.value}" class="form-check-label">서울</label>
+ </div>
+</div>
+```
+
+- th:for="${#ids.prev('regions')}
+- HTML의 id 가 타임리프에 의해 동적으로 만들어지기 때문에 <label for="id 값"> 으로 label 의 대상이 되는
+id 값을 임의로 지정하는 것은 곤란하다. 타임리프는 ids.prev(...) , ids.next(...) 을 제공해서 동적으로
+생성되는 id 값을 사용할 수 있도록 한다.
+
+
